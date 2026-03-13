@@ -309,7 +309,7 @@ begin
           if AFile.ModificationTimeProperty.IsValid then
           begin
             if Length(AParam) > 0 then
-              Result := SysUtils.FormatDateTime(AParam, AFile.ModificationTime)
+              Result := FormatDateTimeWithRelativeDate(AFile.ModificationTime, AParam)
             else
               Result := AFile.Properties[fpModificationTime].Format(DefaultFilePropertyFormatter);
           end;
@@ -321,7 +321,7 @@ begin
           if AFile.CreationTimeProperty.IsValid then
           begin
             if Length(AParam) > 0 then
-              Result := SysUtils.FormatDateTime(AParam, AFile.CreationTime)
+              Result := FormatDateTimeWithRelativeDate(AFile.CreationTime, AParam)
             else
               Result := AFile.Properties[fpCreationTime].Format(DefaultFilePropertyFormatter);
           end;
@@ -333,7 +333,7 @@ begin
           if AFile.LastAccessTimeProperty.IsValid then
           begin
             if Length(AParam) > 0 then
-              Result := SysUtils.FormatDateTime(AParam, AFile.LastAccessTime)
+              Result := FormatDateTimeWithRelativeDate(AFile.LastAccessTime, AParam)
             else
               Result := AFile.Properties[fpLastAccessTime].Format(DefaultFilePropertyFormatter);
           end;
@@ -343,7 +343,7 @@ begin
         if fpChangeTime in AFile.SupportedProperties then
         begin
           if Length(AParam) > 0 then
-            Result := SysUtils.FormatDateTime(AParam, AFile.ChangeTime)
+            Result := FormatDateTimeWithRelativeDate(AFile.ChangeTime, AParam)
           else
             Result := AFile.Properties[fpChangeTime].Format(DefaultFilePropertyFormatter);
         end;

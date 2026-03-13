@@ -410,6 +410,7 @@ var
   gOperationSizeDigits: Integer;
   gSizeDisplayUnits: array[LOW(TFileSizeFormat) .. HIGH(TFileSizeFormat)] of string;
   gDateTimeFormat : String;
+  gRelativeDateDisplay: Boolean;
   gDriveBlackList: String;
   gDriveBlackListUnmounted: Boolean; // Automatically black list unmounted devices
   gListFilesInThread: Boolean;
@@ -1817,6 +1818,7 @@ begin
   gColumnsTitleStyle := tsNative;
   gCustomColumnsChangeAllColumns := False;
   gDateTimeFormat := DefaultDateTimeFormat;
+  gRelativeDateDisplay := False;
   gColumnsTitleLikeValues := False;
   gCutTextToColWidth := True;
   gExtendCellWidth := False;
@@ -2771,6 +2773,7 @@ begin
       gAutoFillColumns := GetValue(Node, 'AutoFillColumns', gAutoFillColumns);
       gAutoSizeColumn := GetValue(Node, 'AutoSizeColumn', gAutoSizeColumn);
       gDateTimeFormat := GetValidDateTimeFormat(GetValue(Node, 'DateTimeFormat', gDateTimeFormat), DefaultDateTimeFormat);
+      gRelativeDateDisplay := GetValue(Node, 'RelativeDateDisplay', gRelativeDateDisplay);
       gColumnsTitleLikeValues := GetValue(Node, 'ColumnsTitleLikeValues', gColumnsTitleLikeValues);
       gCutTextToColWidth := GetValue(Node, 'CutTextToColumnWidth', gCutTextToColWidth);
       gExtendCellWidth := GetValue(Node, 'ExtendCellWidth', gExtendCellWidth);
@@ -3509,6 +3512,7 @@ begin
     SetValue(Node, 'CustomColumnsChangeAllColumns', gCustomColumnsChangeAllColumns);
     SetValue(Node, 'BriefViewFileExtAligned', gBriefViewFileExtAligned);
     SetValue(Node, 'DateTimeFormat', gDateTimeFormat);
+    SetValue(Node, 'RelativeDateDisplay', gRelativeDateDisplay);
     SetValue(Node, 'ColumnsTitleLikeValues', gColumnsTitleLikeValues);
     SetValue(Node, 'CutTextToColumnWidth', gCutTextToColWidth);
     SetValue(Node, 'ExtendCellWidth', gExtendCellWidth);

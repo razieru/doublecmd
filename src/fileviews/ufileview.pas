@@ -452,6 +452,7 @@ type
 
     procedure UpdateView;
     procedure ApplySettings;
+    procedure RefreshDateTimeDisplay;
     procedure UpdateColor; virtual; abstract;
 
     {en
@@ -2919,6 +2920,22 @@ begin
     FFiles[Index].TextColor := clNone;
   end;
   Notify([fvnVisibleFilePropertiesChanged]);
+end;
+
+procedure TFileView.RefreshDateTimeDisplay;
+var
+  Index: Integer;
+begin
+  if (csDestroying in ComponentState) or
+     (GetCurrentWorkType = fvwtCreate) or
+     (not Assigned(FAllDisplayFiles)) then
+    Exit;
+
+  for Index := 0 to FAllDisplayFiles.Count - 1 do
+  begin
+    FAllDisplayFiles[Index].DisplayStrings.Clear;
+  end;
+  RedrawFiles;
 end;
 
 function TFileView.BeforeChangePath(NewFileSource: IFileSource;

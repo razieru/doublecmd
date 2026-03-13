@@ -906,6 +906,8 @@ resourcestring
   rsSimpleWordLetter = 'Letter';
   rsSimpleWordTrue = 'True';
   rsSimpleWordFalse = 'False';
+  rsSimpleWordToday = 'today';
+  rsSimpleWordYesterday = 'yesterday';
   rsSimpleWordError = 'Error';
   rsSimpleWordSuccessExcla = 'Success!';
   rsSimpleWordFailedExcla = 'Failed!';

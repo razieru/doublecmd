@@ -35,6 +35,7 @@ type
 
   TfrmOptionsFilesViews = class(TOptionsEditor)
     btnDefault: TButton;
+    cbRelativeDateDisplay: TCheckBox;
     cbDateTimeFormat: TComboBox;
     cbHeaderSizeFormat: TComboBox;
     cbFooterSizeFormat: TComboBox;
@@ -201,6 +202,7 @@ begin
   edGiga.Text := Trim(gSizeDisplayUnits[fsfPersonalizedGiga]);
   edTera.Text := Trim(gSizeDisplayUnits[fsfPersonalizedTera]);
   cbDateTimeFormat.Text := gDateTimeFormat;
+  cbRelativeDateDisplay.Checked := gRelativeDateDisplay;
   lblDateTimeExample.Caption := FormatDateTime(cbDateTimeFormat.Text, Now);
 
   lblFileSizeExample.Constraints.MinWidth := lblFileSizeExample.Canvas.TextWidth(CnvFormatFileSize(cFileSizeExample, fsfKilo, speNumberOfDigitsFile.MaxValue) + 'WWW');
@@ -246,6 +248,7 @@ begin
   gOperationSizeDigits := speNumberOfDigitsOperation.Value;
   TransferUnitsToOfficialUnits;
   gDateTimeFormat := GetValidDateTimeFormat(cbDateTimeFormat.Text, gDateTimeFormat);
+  gRelativeDateDisplay := cbRelativeDateDisplay.Checked;
 
   Result := [];
 end;

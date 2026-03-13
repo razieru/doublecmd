@@ -180,7 +180,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     AnchorSideRight.Control = Owner
     AnchorSideRight.Side = asrBottom
     Left = 6
-    Height = 136
+    Height = 161
     Top = 175
     Width = 628
     Anchors = [akTop, akLeft, akRight]
@@ -192,7 +192,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     ChildSizing.HorizontalSpacing = 4
     ChildSizing.VerticalSpacing = 12
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ClientHeight = 116
+    ClientHeight = 141
     ClientWidth = 624
     TabOrder = 1
     object lblDateTimeFormat: TLabel
@@ -221,7 +221,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       ItemHeight = 15
       OnChange = RefreshOurExamples
       Style = csDropDownList
-      TabOrder = 1
+      TabOrder = 2
     end
     object lblFileSizeFormat: TLabel
       Left = 12
@@ -289,6 +289,21 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
         TabOrder = 0
       end
     end
+    object cbRelativeDateDisplay: TCheckBox
+      AnchorSideLeft.Control = lblDateTimeFormat
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = pnlDateTime
+      AnchorSideTop.Side = asrBottom
+      Left = 139
+      Height = 23
+      Top = 31
+      Width = 473
+      Anchors = [akLeft, akTop, akRight]
+      BorderSpacing.Left = 10
+      BorderSpacing.Top = 8
+      Caption = 'Relative date display'
+      TabOrder = 1
+    end
     object speNumberOfDigitsFile: TSpinEdit
       AnchorSideLeft.Control = cbFileSizeFormat
       AnchorSideLeft.Side = asrBottom
@@ -302,7 +317,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       Anchors = [akTop, akRight]
       MaxValue = 3
       OnChange = RefreshOurExamples
-      TabOrder = 2
+      TabOrder = 3
     end
     object lblHeaderSizeFormat: TLabel
       Left = 12
@@ -329,7 +344,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       ItemHeight = 15
       OnChange = RefreshOurExamples
       Style = csDropDownList
-      TabOrder = 3
+      TabOrder = 4
     end
     object speNumberOfDigitsHeader: TSpinEdit
       AnchorSideLeft.Control = cbHeaderSizeFormat
@@ -344,7 +359,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       Anchors = [akTop, akRight]
       MaxValue = 3
       OnChange = RefreshOurExamples
-      TabOrder = 4
+      TabOrder = 5
     end
     object lblHeaderSizeExample: TLabel
       AnchorSideTop.Control = cbHeaderSizeFormat
@@ -388,7 +403,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       ItemHeight = 20
       OnChange = RefreshOurExamples
       Style = csDropDownList
-      TabOrder = 5
+      TabOrder = 6
     end
     object speNumberOfDigitsFooter: TSpinEdit
       AnchorSideLeft.Control = cbFooterSizeFormat
@@ -403,7 +418,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       Anchors = [akTop, akRight]
       MaxValue = 3
       OnChange = RefreshOurExamples
-      TabOrder = 6
+      TabOrder = 7
     end
     object lblFooterSizeExample: TLabel
       AnchorSideTop.Control = cbFooterSizeFormat
@@ -469,7 +484,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       Anchors = [akTop, akRight]
       MaxValue = 3
       OnChange = RefreshOurExamples
-      TabOrder = 8
+      TabOrder = 9
     end
     object cbOperationSizeFormat: TComboBox
       AnchorSideLeft.Control = lblOperationSizeFormat
@@ -487,7 +502,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       ItemHeight = 15
       OnChange = RefreshOurExamples
       Style = csDropDownList
-      TabOrder = 7
+      TabOrder = 8
     end
     object lblOperationSizeFormat: TLabel
       Left = 12

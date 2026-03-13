@@ -38,10 +38,175 @@ var
   DefaultFilePropertyFormatter: IFilePropertyFormatter = nil;
   MaxDetailsFilePropertyFormatter: IFilePropertyFormatter = nil;
 
+function FormatDateTimeWithRelativeDate(const AValue: TDateTime; const AFormat: String): String;
+
 implementation
 
 uses
-  uGlobs, uDCUtils, DCBasicTypes, DCFileAttributes, DCDateTimeUtils;
+  DateUtils, uGlobs, uDCUtils, DCBasicTypes, DCFileAttributes, DCDateTimeUtils, uLng;
+
+function IsDateFormatToken(const AChar: Char): Boolean; inline;
+begin
+  Result := (AChar = 'c') or (AChar = 'd') or (AChar = 'm') or
+            (AChar = 'y') or (AChar = 'e') or (AChar = 'g');
+end;
+
+function IsTimeFormatToken(const AChar: Char): Boolean; inline;
+begin
+  Result := (AChar = 'h') or (AChar = 'n') or (AChar = 's') or
+            (AChar = 'z') or (AChar = 't');
+end;
+
+function StartsWithNoCase(const S, AValue: String; AIndex: SizeInt): Boolean; inline;
+var
+  ALen: SizeInt;
+begin
+  ALen := Length(AValue);
+  Result := (AIndex + ALen - 1 <= Length(S)) and
+            SameText(Copy(S, AIndex, ALen), AValue);
+end;
+
+function ContainsDateFormatToken(const AFormat: String): Boolean;
+var
+  I: SizeInt;
+  AChar: Char;
+begin
+  I := 1;
+  while I <= Length(AFormat) do
+  begin
+    AChar := AFormat[I];
+    if AChar = '''' then
+    begin
+      Inc(I);
+      while I <= Length(AFormat) do
+      begin
+        if AFormat[I] = '''' then
+        begin
+          Inc(I);
+          Break;
+        end;
+        Inc(I);
+      end;
+      Continue;
+    end;
+
+    if IsDateFormatToken(AChar) then
+      Exit(True);
+
+    Inc(I);
+  end;
+  Result := False;
+end;
+
+function ExtractTimeFormat(const AFormat: String): String;
+var
+  I: SizeInt;
+  AChar: Char;
+  TokenLen: SizeInt;
+begin
+  Result := EmptyStr;
+  I := 1;
+  while I <= Length(AFormat) do
+  begin
+    AChar := AFormat[I];
+    if AChar = '''' then
+    begin
+      Result += AChar;
+      Inc(I);
+      while I <= Length(AFormat) do
+      begin
+        Result += AFormat[I];
+        if AFormat[I] = '''' then
+        begin
+          Inc(I);
+          Break;
+        end;
+        Inc(I);
+      end;
+      Continue;
+    end;
+
+    if StartsWithNoCase(AFormat, 'AM/PM', I) then
+      TokenLen := 5
+    else if StartsWithNoCase(AFormat, 'A/P', I) then
+      TokenLen := 3
+    else if StartsWithNoCase(AFormat, 'AMPM', I) then
+      TokenLen := 4
+    else
+      TokenLen := 0;
+
+    if TokenLen > 0 then
+    begin
+      Result += Copy(AFormat, I, TokenLen);
+      Inc(I, TokenLen);
+      Continue;
+    end;
+
+    if IsDateFormatToken(AChar) then
+    begin
+      repeat
+        Inc(I);
+      until (I > Length(AFormat)) or (AFormat[I] <> AChar);
+      Continue;
+    end;
+
+    if IsTimeFormatToken(AChar) then
+    begin
+      repeat
+        Result += AFormat[I];
+        Inc(I);
+      until (I > Length(AFormat)) or (AFormat[I] <> AChar);
+      Continue;
+    end;
+
+    Result += AChar;
+    Inc(I);
+  end;
+
+  Result := Trim(Result);
+  while (Length(Result) > 0) and CharInSet(Result[1], [' ', ',', '.', '-', '/', '\']) do
+    Delete(Result, 1, 1);
+  while (Length(Result) > 0) and CharInSet(Result[Length(Result)], [' ', ',', '.', '-', '/', '\']) do
+    SetLength(Result, Length(Result) - 1);
+end;
+
+function GetRelativeDateWord(const AValue: TDateTime): String;
+var
+  DaysDiff: Int64;
+begin
+  DaysDiff := Trunc(DateOf(Now) - DateOf(AValue));
+  case DaysDiff of
+    0: Result := rsSimpleWordToday;
+    1: Result := rsSimpleWordYesterday;
+    else Result := EmptyStr;
+  end;
+end;
+
+function FormatDateTimeWithRelativeDate(const AValue: TDateTime; const AFormat: String): String;
+var
+  RelativeWord: String;
+  TimeFormat: String;
+  TimeText: String;
+begin
+  if not gRelativeDateDisplay then
+    Exit(SysUtils.FormatDateTime(AFormat, AValue));
+  if not ContainsDateFormatToken(AFormat) then
+    Exit(SysUtils.FormatDateTime(AFormat, AValue));
+
+  RelativeWord := GetRelativeDateWord(AValue);
+  if RelativeWord = EmptyStr then
+    Exit(SysUtils.FormatDateTime(AFormat, AValue));
+
+  TimeFormat := ExtractTimeFormat(AFormat);
+  if TimeFormat = EmptyStr then
+    Exit(RelativeWord);
+
+  TimeText := Trim(SysUtils.FormatDateTime(TimeFormat, AValue));
+  if TimeText = EmptyStr then
+    Exit(RelativeWord);
+
+  Result := RelativeWord + ' ' + TimeText;
+end;
 
 function TDefaultFilePropertyFormatter.FormatFileName(
            FileProperty: TFileNameProperty): String;
@@ -58,7 +223,7 @@ end;
 function TDefaultFilePropertyFormatter.FormatDateTime(
             FileProperty: TFileDateTimeProperty): String;
 begin
-  Result := SysUtils.FormatDateTime(gDateTimeFormat, FileProperty.Value);
+  Result := FormatDateTimeWithRelativeDate(FileProperty.Value, gDateTimeFormat);
 end;
 
 function TDefaultFilePropertyFormatter.FormatModificationDateTime(

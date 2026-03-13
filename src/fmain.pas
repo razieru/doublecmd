@@ -1,4 +1,4 @@
-﻿{
+{
    Double Commander
    -------------------------------------------------------------------------
    Licence  : GNU GPL v 2.0
@@ -703,6 +703,7 @@ type
     procedure OnUniqueInstanceMessage(Sender: TObject; Params: TCommandLineParams);
     procedure tbPasteClick(Sender: TObject);
     procedure AllProgressOnUpdateTimer(Sender: TObject);
+    procedure RelativeDateDisplayTimer(Sender: TObject);
     procedure OperationManagerNotify(Item: TOperationsManagerItem;
                                      Event: TOperationManagerEvent);
 {$IF (DEFINED(LCLQT) or DEFINED(LCLQT5) or DEFINED(LCLQT6)) and not DEFINED(MSWINDOWS)}
@@ -755,6 +756,8 @@ type
     FRestoredHeight: Integer;
     FDelayedEventCtr: Integer;
     FDelayedWMMove, FDelayedWMSize: Boolean;
+    FRelativeDateDisplayDay: Int64;
+    FRelativeDateTimer: TTimer;
 
     procedure DelayedEvent(Data: PtrInt);
 
@@ -787,6 +790,7 @@ type
     procedure OnDriveWatcherEvent(EventType: TDriveWatcherEvent; const ADrive: PDrive);
     procedure AppActivate(Sender: TObject);
     procedure AppDeActivate(Sender: TObject);
+    procedure RefreshRelativeDateInView(AFileView: TFileView; {%H-}UserData: Pointer);
     procedure AppEndSession(Sender: TObject);
     procedure AppThemeChange(Sender: TObject);
     procedure AppQueryEndSession(var Cancel: Boolean);
@@ -1114,6 +1118,12 @@ begin
   Application.OnShowHint := @AppShowHint;
   Application.OnEndSession := @AppEndSession;
   Application.OnQueryEndSession := @AppQueryEndSession;
+
+  FRelativeDateDisplayDay := Trunc(Now);
+  FRelativeDateTimer := TTimer.Create(Self);
+  FRelativeDateTimer.Interval := 30000;
+  FRelativeDateTimer.OnTimer := @RelativeDateDisplayTimer;
+  FRelativeDateTimer.Enabled := True;
 
   {$IF DEFINED(DARWIN)}
   // in LCL's DARWIN implements, there is no way but to Use LCL's method of dropping files
@@ -1804,6 +1814,9 @@ end;
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
   DCDebug('Destroying main form');
+
+  if Assigned(FRelativeDateTimer) then
+    FRelativeDateTimer.Enabled := False;
 
   if Assigned(HotMan) then
   begin
@@ -7138,6 +7151,30 @@ begin
   end;
 
   Sleep(0);
+end;
+
+procedure TfrmMain.RelativeDateDisplayTimer(Sender: TObject);
+var
+  ACurrentDay: Int64;
+begin
+  if not gRelativeDateDisplay then
+  begin
+    FRelativeDateDisplayDay := Trunc(Now);
+    Exit;
+  end;
+
+  ACurrentDay := Trunc(Now);
+  if ACurrentDay <> FRelativeDateDisplayDay then
+  begin
+    FRelativeDateDisplayDay := ACurrentDay;
+    ForEachView(@RefreshRelativeDateInView, nil);
+  end;
+end;
+
+procedure TfrmMain.RefreshRelativeDateInView(AFileView: TFileView; {%H-}UserData: Pointer);
+begin
+  if Assigned(AFileView) then
+    AFileView.RefreshDateTimeDisplay;
 end;
 
 procedure TfrmMain.OperationManagerNotify(Item: TOperationsManagerItem;
