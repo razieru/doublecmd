@@ -45,16 +45,28 @@ implementation
 uses
   DateUtils, uGlobs, uDCUtils, DCBasicTypes, DCFileAttributes, DCDateTimeUtils, uLng;
 
+type
+  TFormatTokenKind = (ftkNone, ftkDate, ftkTime);
+
 function IsDateFormatToken(const AChar: Char): Boolean; inline;
 begin
-  Result := (AChar = 'c') or (AChar = 'd') or (AChar = 'm') or
-            (AChar = 'y') or (AChar = 'e') or (AChar = 'g');
+  case UpCase(AChar) of
+    'C', 'D', 'Y', 'E', 'G': Result := True;
+    else Result := False;
+  end;
 end;
 
 function IsTimeFormatToken(const AChar: Char): Boolean; inline;
 begin
-  Result := (AChar = 'h') or (AChar = 'n') or (AChar = 's') or
-            (AChar = 'z') or (AChar = 't');
+  case UpCase(AChar) of
+    'H', 'N', 'S', 'Z', 'T': Result := True;
+    else Result := False;
+  end;
+end;
+
+function IsMonthOrMinuteToken(const AChar: Char): Boolean; inline;
+begin
+  Result := UpCase(AChar) = 'M';
 end;
 
 function StartsWithNoCase(const S, AValue: String; AIndex: SizeInt): Boolean; inline;
@@ -70,8 +82,10 @@ function ContainsDateFormatToken(const AFormat: String): Boolean;
 var
   I: SizeInt;
   AChar: Char;
+  LastTokenKind: TFormatTokenKind;
 begin
   I := 1;
+  LastTokenKind := ftkNone;
   while I <= Length(AFormat) do
   begin
     AChar := AFormat[I];
@@ -90,8 +104,37 @@ begin
       Continue;
     end;
 
+    if StartsWithNoCase(AFormat, 'AM/PM', I) then
+    begin
+      Inc(I, 5);
+      LastTokenKind := ftkTime;
+      Continue;
+    end
+    else if StartsWithNoCase(AFormat, 'A/P', I) then
+    begin
+      Inc(I, 3);
+      LastTokenKind := ftkTime;
+      Continue;
+    end
+    else if StartsWithNoCase(AFormat, 'AMPM', I) then
+    begin
+      Inc(I, 4);
+      LastTokenKind := ftkTime;
+      Continue;
+    end;
+
     if IsDateFormatToken(AChar) then
+    begin
       Exit(True);
+    end
+    else if IsTimeFormatToken(AChar) then
+      LastTokenKind := ftkTime
+    else if IsMonthOrMinuteToken(AChar) then
+    begin
+      if LastTokenKind <> ftkTime then
+        Exit(True);
+      LastTokenKind := ftkTime;
+    end;
 
     Inc(I);
   end;
@@ -103,9 +146,11 @@ var
   I: SizeInt;
   AChar: Char;
   TokenLen: SizeInt;
+  LastTokenKind: TFormatTokenKind;
 begin
   Result := EmptyStr;
   I := 1;
+  LastTokenKind := ftkNone;
   while I <= Length(AFormat) do
   begin
     AChar := AFormat[I];
@@ -139,6 +184,7 @@ begin
     begin
       Result += Copy(AFormat, I, TokenLen);
       Inc(I, TokenLen);
+      LastTokenKind := ftkTime;
       Continue;
     end;
 
@@ -146,7 +192,8 @@ begin
     begin
       repeat
         Inc(I);
-      until (I > Length(AFormat)) or (AFormat[I] <> AChar);
+      until (I > Length(AFormat)) or (UpCase(AFormat[I]) <> UpCase(AChar));
+      LastTokenKind := ftkDate;
       Continue;
     end;
 
@@ -155,7 +202,28 @@ begin
       repeat
         Result += AFormat[I];
         Inc(I);
-      until (I > Length(AFormat)) or (AFormat[I] <> AChar);
+      until (I > Length(AFormat)) or (UpCase(AFormat[I]) <> UpCase(AChar));
+      LastTokenKind := ftkTime;
+      Continue;
+    end;
+
+    if IsMonthOrMinuteToken(AChar) then
+    begin
+      if LastTokenKind = ftkTime then
+      begin
+        repeat
+          Result += AFormat[I];
+          Inc(I);
+        until (I > Length(AFormat)) or (UpCase(AFormat[I]) <> UpCase(AChar));
+        LastTokenKind := ftkTime;
+      end
+      else
+      begin
+        repeat
+          Inc(I);
+        until (I > Length(AFormat)) or (UpCase(AFormat[I]) <> UpCase(AChar));
+        LastTokenKind := ftkDate;
+      end;
       Continue;
     end;
 

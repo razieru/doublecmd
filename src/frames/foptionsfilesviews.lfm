@@ -213,7 +213,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = speNumberOfDigitsFile
       Left = 139
       Height = 23
-      Top = 31
+      Top = 62
       Width = 379
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -226,7 +226,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     object lblFileSizeFormat: TLabel
       Left = 12
       Height = 15
-      Top = 35
+      Top = 66
       Width = 117
       Caption = 'File si&ze format:'
       FocusControl = cbFileSizeFormat
@@ -312,7 +312,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = lblFileSizeExample
       Left = 524
       Height = 23
-      Top = 31
+      Top = 62
       Width = 50
       Anchors = [akTop, akRight]
       MaxValue = 3
@@ -322,7 +322,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     object lblHeaderSizeFormat: TLabel
       Left = 12
       Height = 20
-      Top = 72
+      Top = 103
       Width = 148
       Caption = '&Header format:'
       FocusControl = cbHeaderSizeFormat
@@ -336,7 +336,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = speNumberOfDigitsHeader
       Left = 170
       Height = 28
-      Top = 68
+      Top = 99
       Width = 335
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -354,7 +354,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = lblHeaderSizeExample
       Left = 511
       Height = 28
-      Top = 68
+      Top = 99
       Width = 63
       Anchors = [akTop, akRight]
       MaxValue = 3
@@ -368,7 +368,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Side = asrBottom
       Left = 580
       Height = 12
-      Top = 63
+      Top = 94
       Width = 32
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -381,7 +381,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     object lblFooterSizeFormat: TLabel
       Left = 12
       Height = 20
-      Top = 104
+      Top = 135
       Width = 148
       Caption = '&Footer format:'
       FocusControl = cbFooterSizeFormat
@@ -395,7 +395,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = speNumberOfDigitsFooter
       Left = 170
       Height = 28
-      Top = 100
+      Top = 131
       Width = 335
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -413,7 +413,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = lblFooterSizeExample
       Left = 511
       Height = 28
-      Top = 100
+      Top = 131
       Width = 63
       Anchors = [akTop, akRight]
       MaxValue = 3
@@ -427,7 +427,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Side = asrBottom
       Left = 580
       Height = 12
-      Top = 108
+      Top = 139
       Width = 32
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -444,7 +444,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Side = asrBottom
       Left = 580
       Height = 12
-      Top = 36
+      Top = 67
       Width = 32
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -461,7 +461,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Side = asrBottom
       Left = 580
       Height = 12
-      Top = 90
+      Top = 121
       Width = 32
       Alignment = taRightJustify
       Anchors = [akTop, akRight]
@@ -479,7 +479,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = lblOperationSizeExample
       Left = 524
       Height = 23
-      Top = 85
+      Top = 116
       Width = 50
       Anchors = [akTop, akRight]
       MaxValue = 3
@@ -494,7 +494,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
       AnchorSideRight.Control = speNumberOfDigitsOperation
       Left = 139
       Height = 23
-      Top = 85
+      Top = 116
       Width = 379
       Anchors = [akTop, akLeft, akRight]
       BorderSpacing.Left = 10
@@ -507,7 +507,7 @@ inherited frmOptionsFilesViews: TfrmOptionsFilesViews
     object lblOperationSizeFormat: TLabel
       Left = 12
       Height = 15
-      Top = 89
+      Top = 120
       Width = 117
       Caption = 'O&peration size format:'
       FocusControl = cbOperationSizeFormat
